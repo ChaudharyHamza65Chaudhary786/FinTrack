@@ -16,7 +16,14 @@ class Command(BaseCommand):
        
         bank = Bank.objects.create(name="HBL")
         branch = BankBranch.objects.create(bank=bank, branch_name="JT", branch_code="0169")
-        bank_acc = BankAccount.objects.create(branch=branch, current_balance=1200, acc_number="100", acc_holder_name="hamza", acc_type="Current", acc_holder=user)
+        bank_acc = BankAccount.objects.create(
+            branch=branch,
+            current_balance=1200, 
+            acc_number="100", 
+            acc_holder_name="hamza", 
+            acc_type="Current", 
+            acc_holder=user
+        )
 
 
         income = Category.objects.create(name="Income")

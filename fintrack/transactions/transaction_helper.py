@@ -3,12 +3,12 @@ from . models import Transaction, Category, SubCategory
 from bank_accounts.models import BankAccount
 
 
-def create_transaction(description, date, amount, acc, cat, sub_cat):
-    category = Category.objects.get(name=cat)
+def create_transaction(description, date, amount, account, category, sub_cat):
+    category = Category.objects.get(name=category)
     sub_category = SubCategory.objects.get(sub_category=sub_cat)
-    bank_acc = acc
+    bank_acc = account
     trans1 = Transaction.objects.create(date=date, amount=amount, transaction_from_account=bank_acc, sub_category=sub_category)
-    if cat == "Expense":
+    if category == "Expense":
         deduct_amount(bank_acc, amount)
     else:
         add_amount(bank_acc, amount)

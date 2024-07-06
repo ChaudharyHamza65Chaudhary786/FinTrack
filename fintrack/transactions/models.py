@@ -28,5 +28,3 @@ class Transaction(models.Model):
 
     transaction_from_account = models.ForeignKey("bank_accounts.BankAccount", on_delete=models.CASCADE)
     sub_category = models.ForeignKey("transactions.SubCategory", on_delete=models.CASCADE)
-    
-    
