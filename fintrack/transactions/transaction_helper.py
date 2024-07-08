@@ -1,6 +1,6 @@
 
 from . models import Transaction, Category, SubCategory
-from bank_accounts.models import BankAccount
+from bank_accounts.bank_account_helper import add_amount, deduct_amount
 
 
 def create_transaction(description, date, amount, account, category, sub_cat):
@@ -21,12 +21,3 @@ def delete_transaction(transaction):
     else:
         deduct_amount(bank_acc, transaction.amount)
     transaction.delete()
-
-
-def deduct_amount(bank_acc, amount):
-    bank_acc.current_balance = bank_acc.current_balance - amount
-    bank_acc.save()
-
-def add_amount(bank_acc, amount):
-    bank_acc.current_balance = bank_acc.current_balance + amount
-    bank_acc.save()
