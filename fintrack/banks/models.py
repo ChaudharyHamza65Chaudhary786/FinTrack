@@ -9,13 +9,16 @@ class Bank(models.Model):
     
 
 class BankBranch(models.Model):
-    branch_name = models.CharField(max_length=100)
-    branch_code = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100)
+    code = models.CharField(max_length=100, unique=True)
+    address = models.CharField(max_length=250)
+    phone_number = models.CharField(max_length=14)
+    
 
     bank = models.ForeignKey("banks.Bank", on_delete=models.CASCADE)
 
     def __str__(self):
-        return f"{self.branch_name} ({self.branch_code})"
+        return f"{self.name} ({self.code})"
     
     @property
     def bank_name(self):
