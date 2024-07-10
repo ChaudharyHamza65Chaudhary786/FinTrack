@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('description', models.CharField(blank=True, max_length=300)),
-                ('category', models.CharField(choices=[('Withdrawl', 'Withdrawl'), ('Deposit', 'Deposit')], max_length=20)),
+                ('category', models.CharField(choices=[('Withdraw', 'Withdraw'), ('Deposit', 'Deposit')], max_length=20)),
                 ('date', models.DateField()),
                 ('amount', models.PositiveIntegerField()),
                 ('transaction_from_account', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='accounts.account')),

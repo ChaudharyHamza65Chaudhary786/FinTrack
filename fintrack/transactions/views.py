@@ -27,7 +27,7 @@ def transaction(request):
         return Response(serializer.data)
 
 
-@api_view(['GET', 'PUT', 'DELETE'])
+@api_view(['GET'])
 def transaction_detail(request, pk):
     try:
         transaction = Transaction.objects.get(pk=pk)
@@ -38,7 +38,17 @@ def transaction_detail(request, pk):
         serializer = TransactionSerializer(transaction)
         return Response (serializer.data)
 
-    elif request.method == 'PUT':
+
+@api_view([ 'PUT', 'DELETE'])
+def manage_transaction(request, pk):
+    try:
+        transaction = Transaction.objects.get(pk=pk)
+        if "REVERTED" in transaction.description:
+            raise ValueError("Can not update a reverted transaction")
+    except Transaction.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'PUT':
         serializer = TransactionSerializer(transaction, data=request.data)
         if serializer.is_valid():
             transaction_manager.update_transaction(transaction, serializer.validated_data)

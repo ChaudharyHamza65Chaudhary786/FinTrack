@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 
 from choices import TransactionCategoriesChoices
@@ -7,7 +6,7 @@ from choices import TransactionCategoriesChoices
 
 class Transaction(models.Model):
 
-    description = models.CharField(max_length=300, blank=True)
+    description = models.TextField(blank=True)
     category = models.CharField(
         max_length=20, 
         choices=TransactionCategoriesChoices.choices

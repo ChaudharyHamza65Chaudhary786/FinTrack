@@ -1,10 +1,12 @@
+from django.db import transaction
+
 
 from . models import Transaction
-from accounts.models import Account
 from accounts.account_helper import AccountHelper
 
 
-WITHDRAWAL_CATEGORY = "withdrawal"
+WITHDRAW_CATEGORY = "Withdraw"
+DEPOSIT_CATEGORY = "Deposit"
 
 
 class TransactionManager:
@@ -20,7 +22,7 @@ class TransactionManager:
         )  
     
     def update_balance_on_transaction_creation(self, account, transaction_updated_data):
-        if transaction_updated_data["category"] == WITHDRAWAL_CATEGORY:
+        if transaction_updated_data["category"] == WITHDRAW_CATEGORY:
             self.account_helper.deduct_amount(
                 account, 
                 transaction_updated_data["amount"]
@@ -31,6 +33,7 @@ class TransactionManager:
                 transaction_updated_data["amount"]
             )
 
+    @transaction.atomic
     def handle_new_transaction(self, transaction_updated_data):
          self.create_transaction(transaction_updated_data)
          self.update_balance_on_transaction_creation(
@@ -39,8 +42,7 @@ class TransactionManager:
          )
         
     def delete_transaction(self, transaction):
-        
-        if transaction.category == WITHDRAWAL_CATEGORY:
+        if transaction.category == WITHDRAW_CATEGORY:
             self.account_helper.add_amount(
                 transaction.transaction_from_account, 
                 transaction.amount
@@ -52,83 +54,34 @@ class TransactionManager:
             )
         transaction.delete()
 
+    @transaction.atomic
     def update_transaction(self, transaction_to_update, transaction_updated_data):
-        self.update_balance_if_account_changed(
-            transaction_to_update, 
-            transaction_updated_data
+        self.revert_transaction(transaction_to_update)
+        self.handle_new_transaction(transaction_updated_data)
+
+    def revert_transaction(self, transaction_to_revert):
+        account = transaction_to_revert.transaction_from_account
+
+        if transaction_to_revert.category == WITHDRAW_CATEGORY:
+            self.account_helper.add_amount(
+                account,
+                transaction_to_revert.amount
+            )
+        else:
+            self.account_helper.deduct_amount(
+                account,
+                transaction_to_revert.amount
+            )
+
+        new_description = (
+            f" REVERTED: {transaction_to_revert.description}"
+            f"Amount : {transaction_to_revert.amount} ({transaction_to_revert.category})"
         )
-        self.update_balance_if_category_changed(
-            transaction_to_update, 
-            transaction_updated_data
-        )
-        self.update_balance_if_amount_changed(
-            transaction_to_update, 
-            transaction_updated_data
-        )
-        transaction_to_update.description = transaction_updated_data["description"]
-        transaction_to_update.date = transaction_updated_data["date"]
-        transaction_to_update.amount = transaction_updated_data["amount"]
-        transaction_to_update.category = transaction_updated_data["category"]
-        transaction_to_update.save()
-
-    def update_balance_if_account_changed(self, transaction_to_update, transaction_updated_data):
-        
-        if (transaction_to_update.transaction_from_account 
-            != transaction_updated_data["transaction_from_account"]):
-
-                new_account = transaction_updated_data["transaction_from_account"]
-                current_account = transaction_to_update.transaction_from_account
-
-                if transaction_to_update.category == WITHDRAWAL_CATEGORY:
-                    self.account_helper.add_amount(
-                        current_account, 
-                        transaction_to_update.amount
-                    )
-                    self.account_helper.deduct_amount(
-                        new_account, 
-                        transaction_to_update.amount
-                    )
-                else:
-                    self.account_helper.deduct_amount(
-                        current_account, 
-                        transaction_to_update.amount
-                    )
-                    self.account_helper.add_amount(
-                        new_account, 
-                        transaction_to_update.amount
-                    )            
-                current_account = new_account
-    
-    def update_balance_if_category_changed(self, transaction_to_update, transaction_updated_data):
-            previous_category = transaction_to_update.category
-            current_account = transaction_to_update.transaction_from_account
-
-            if previous_category != transaction_updated_data["category"]:
-
-                if transaction_updated_data["category"] == WITHDRAWAL_CATEGORY:
-                    self.account_helper.deduct_amount(
-                        current_account, 
-                        2*transaction_to_update.amount 
-                    )
-                else:
-                    self.account_helper.add_amount(
-                        current_account, 
-                        2*transaction_to_update.amount
-                    )
-
-    def update_balance_if_amount_changed(self, transaction_to_update, transaction_updated_data):
-        amount_difference = transaction_to_update.amount - transaction_updated_data["amount"]
-        current_account = transaction_to_update.transaction_from_account
-
-        if amount_difference != 0:
-
-            if transaction_updated_data["category"] == WITHDRAWAL_CATEGORY:
-                self.account_helper.add_amount(
-                    current_account, 
-                    amount_difference
-                )
-            else:
-                self.account_helper.deduct_amount(
-                    current_account, 
-                    amount_difference
-                )
+        revert_transaction_data = {
+            "description": new_description,
+            "date": transaction_to_revert.date, 
+            "amount": 0,
+            "transaction_from_account": transaction_to_revert.transaction_from_account,
+            "category": transaction_to_revert.category,  
+        }
+        self.handle_new_transaction(revert_transaction_data)
