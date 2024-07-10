@@ -1,12 +1,51 @@
-from django.shortcuts import render
-from django.views.generic import ListView
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
 
 from . models import Transaction
+from . serializer import TransactionSerializer
+from . transaction_helper import TransactionManager
 
-class TransactionsListingView(ListView):
-    model = Transaction
-    context_object_name = 'transactions'
-    template_name = 'transactions/list_transactions.html'
 
-    def get_queryset(self):
-        return Transaction.objects.filter(transaction_from_account__holder=self.request.user)
+transaction_manager = TransactionManager()
+
+
+@api_view(['GET', 'POST'])
+def transaction(request):
+    if request.method == 'GET':
+        transactions = Transaction.objects.all()
+        serializer = TransactionSerializer(transactions, many=True)
+        return Response (serializer.data)
+    
+    elif request.method == 'POST':
+        serializer = TransactionSerializer(data=request.data)
+        if serializer.is_valid():
+            transaction_manager.handle_new_transaction(serializer.validated_data)
+        else:
+            print(serializer.errors)
+        return Response(serializer.data)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+def transaction_detail(request, pk):
+    try:
+        transaction = Transaction.objects.get(pk=pk)
+    except Transaction.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    if request.method == 'GET':
+        serializer = TransactionSerializer(transaction)
+        return Response (serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = TransactionSerializer(transaction, data=request.data)
+        if serializer.is_valid():
+            transaction_manager.update_transaction(transaction, serializer.validated_data)
+            return Response(serializer.data)     
+        else:
+            print(serializer.errors)
+
+    else:
+        transaction_manager.delete_transaction(transaction)
+        return Response.status_code(status=status.HTTP_204_NO_CONTENT)

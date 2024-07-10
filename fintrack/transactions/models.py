@@ -1,30 +1,23 @@
 from django.db import models
-
-from users.models import User
-
-
-class Category(models.Model):
-    name = models.CharField(max_length=50, blank=False, unique=True)
-
-    def __str__(self):
-        return self.name
+from django.utils.translation import gettext_lazy as _
 
 
-class SubCategory(models.Model):
-    sub_category = models.CharField(max_length=50, blank=False, unique=True)
-
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.sub_category
+from choices import TransactionCategoriesChoices
 
 
 class Transaction(models.Model):
+
     description = models.CharField(max_length=300, blank=True)
+    category = models.CharField(
+        max_length=20, 
+        choices=TransactionCategoriesChoices.choices
+    )
 
-    date = models.DateField(blank=False)
+    date = models.DateField()
 
-    amount = models.PositiveIntegerField(blank=False)
+    amount = models.PositiveIntegerField()
 
-    transaction_from_account = models.ForeignKey("bank_accounts.BankAccount", on_delete=models.CASCADE)
-    sub_category = models.ForeignKey("transactions.SubCategory", on_delete=models.CASCADE)
+    transaction_from_account = models.ForeignKey(
+        "accounts.Account", 
+        on_delete=models.CASCADE
+    )
