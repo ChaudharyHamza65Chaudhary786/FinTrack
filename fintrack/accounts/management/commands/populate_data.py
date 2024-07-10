@@ -20,8 +20,8 @@ class Command(BaseCommand):
         # account = Account.objects.create(
         #     branch=branch,
         #     current_balance=1200, 
-        #     acc_number="200", 
-        #     holder_name="hamza", 
+        #     number="200", 
+        #     title="hamza", 
         #     category="Current", 
         #     holder=user
         # )
@@ -29,7 +29,7 @@ class Command(BaseCommand):
         # trans1 = create_transaction("first transaction",datetime.date(2023,10,5),500, account, "Withdrawl")
 
         # trans2 = create_transaction("secondst transaction",datetime.date(2023,10,5),5000, account, "Deposit")
-        acc = Account.objects.get(acc_number="200")
-        acc_1 = Account.objects.get(acc_number="100")
+        acc = Account.objects.get(number="200")
+        acc_1 = Account.objects.get(number="100")
         print(acc.current_balance, acc_1.current_balance)
 

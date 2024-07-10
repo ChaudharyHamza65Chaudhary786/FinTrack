@@ -7,7 +7,7 @@ from accounts.account_helper import AccountHelper
 WITHDRAWAL_CATEGORY = "withdrawal"
 
 
-class TransactionManager():
+class TransactionManager:
     account_helper = AccountHelper()
        
     def create_transaction(self, transaction_updated_data):    
