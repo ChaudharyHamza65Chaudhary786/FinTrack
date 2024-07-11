@@ -1,11 +1,9 @@
 from django.db import models
 
-
 from choices import TransactionCategoriesChoices
 
 
 class Transaction(models.Model):
-
     description = models.TextField(blank=True)
     category = models.CharField(
         max_length=20, 
@@ -14,7 +12,7 @@ class Transaction(models.Model):
 
     date = models.DateField()
 
-    amount = models.PositiveIntegerField()
+    amount = models.IntegerField()
 
     transaction_from_account = models.ForeignKey(
         "accounts.Account", 

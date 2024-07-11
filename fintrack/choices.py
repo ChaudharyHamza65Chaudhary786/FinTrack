@@ -2,10 +2,10 @@ from django.db import models
 
 
 class TransactionCategoriesChoices(models.TextChoices):
-    Withdraw = "Withdraw", ("Withdraw")
-    Deopsit = "Deposit", ("Deposit")
+    withdraw = "WITHDRAW", "Withdraw"
+    deopsit = "DEPOSIT", "Deposit"
 
 
 class AccountCategoryChoices(models.TextChoices):
-    Current = "Current", ("Current")
-    Saving = "Saving", ("Saving")
+    current = "CURRENT", "Current"
+    saving = "SAVING", "Saving"
