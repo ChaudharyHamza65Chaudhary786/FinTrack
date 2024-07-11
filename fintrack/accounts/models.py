@@ -1,7 +1,7 @@
 from django.db import models
 
 from banks.models import Branch
-from choices import AccountCategoryChoices
+from .choices import AccountCategoryChoices
 from users.models import User
 
 

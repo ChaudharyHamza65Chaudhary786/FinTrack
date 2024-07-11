@@ -1,6 +1,6 @@
 from django.db import models
 
-from choices import TransactionCategoriesChoices
+from .choices import TransactionCategoriesChoices
 
 
 class Transaction(models.Model):
