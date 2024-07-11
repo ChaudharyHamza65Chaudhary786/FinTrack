@@ -37,7 +37,7 @@ class Command(BaseCommand):
             current_balance=1200, 
             number="200", 
             title="hamza", 
-            category="Current", 
+            category="CURRENT", 
             holder=user
         )
 
@@ -47,7 +47,7 @@ class Command(BaseCommand):
                 datetime.date(2023, 10, 5), 
                 500, 
                 account, 
-                "Withdraw"
+                "WITHDRAW"
             )
         )
         
@@ -57,7 +57,7 @@ class Command(BaseCommand):
                 datetime.date(2023, 10, 5), 
                 5000, 
                 account, 
-                "Deposit"
+                "DEPOSIT"
             )
         )
         acc = Account.objects.get(number="200")
