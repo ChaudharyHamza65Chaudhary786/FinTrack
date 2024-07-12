@@ -16,7 +16,7 @@ def transaction(request):
     response = None
 
     if request.method == 'GET':
-        transactions = Transaction.objects.all().filter()
+        transactions = Transaction.objects.all()
 
         paginator = PageNumberPagination()
         paginated_transactions = paginator.paginate_queryset(transactions, request)
