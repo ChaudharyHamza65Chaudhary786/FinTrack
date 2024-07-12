@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 
 from . models import Transaction
@@ -16,8 +17,12 @@ def transaction(request):
 
     if request.method == 'GET':
         transactions = Transaction.objects.all().filter()
-        serializer = TransactionSerializer(transactions, many=True)
-        response = Response(serializer.data)
+
+        paginator = PageNumberPagination()
+        paginated_transactions = paginator.paginate_queryset(transactions, request)
+
+        serializer = TransactionSerializer(paginated_transactions, many=True)
+        response = paginator.get_paginated_response(serializer.data)
     else:
         if request.data["amount"] < 0:
             response = Response(
@@ -26,6 +31,7 @@ def transaction(request):
             )
         else:
             serializer = TransactionSerializer(data=request.data)
+
             if serializer.is_valid():
                 transaction_manager.handle_new_transaction(serializer.validated_data)
                 response = Response(serializer.data)
