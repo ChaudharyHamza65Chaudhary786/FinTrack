@@ -5,6 +5,7 @@ from .choices import TransactionCategoriesChoices
 
 class Transaction(models.Model):
     description = models.TextField(blank=True)
+    
     category = models.CharField(
         max_length=20, 
         choices=TransactionCategoriesChoices.choices
