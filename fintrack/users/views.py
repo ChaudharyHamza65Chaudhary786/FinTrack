@@ -10,9 +10,7 @@ def register(request):
     response = None
 
     serializer = UserSerializer(data=request.data)
-    if serializer.is_valid():
-        serializer.save()
-        response = Response(serializer.validated_data)
-    else:
-        response = Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+    response = Response(serializer.validated_data)
     return response
