@@ -16,7 +16,7 @@ def transaction(request):
     response = None
 
     if request.method == 'GET':
-        transactions = Transaction.objects.all().filter()
+        transactions = Transaction.objects.all()
 
         paginator = PageNumberPagination()
         paginated_transactions = paginator.paginate_queryset(transactions, request)
@@ -32,11 +32,10 @@ def transaction(request):
         else:
             serializer = TransactionSerializer(data=request.data)
 
-            if serializer.is_valid():
-                transaction_manager.handle_new_transaction(serializer.validated_data)
-                response = Response(serializer.data)
-            else:
-                response = Response(serializer.errors)
+            serializer.is_valid(raise_exception=True)
+            transaction_manager.handle_new_transaction(serializer.validated_data)
+            response = Response(serializer.data)
+            
     return response
 
 
