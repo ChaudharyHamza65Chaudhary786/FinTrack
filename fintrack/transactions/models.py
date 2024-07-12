@@ -1,13 +1,11 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
-
-from choices import TransactionCategoriesChoices
+from .choices import TransactionCategoriesChoices
 
 
 class Transaction(models.Model):
+    description = models.TextField(blank=True)
 
-    description = models.CharField(max_length=300, blank=True)
     category = models.CharField(
         max_length=20, 
         choices=TransactionCategoriesChoices.choices
@@ -15,7 +13,8 @@ class Transaction(models.Model):
 
     date = models.DateField()
 
-    amount = models.PositiveIntegerField()
+    amount = models.IntegerField()
+
 
     transaction_from_account = models.ForeignKey(
         "accounts.Account", 
