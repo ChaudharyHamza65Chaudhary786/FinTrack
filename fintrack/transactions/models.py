@@ -15,6 +15,7 @@ class Transaction(models.Model):
 
     amount = models.IntegerField()
 
+
     transaction_from_account = models.ForeignKey(
         "accounts.Account", 
         on_delete=models.CASCADE
