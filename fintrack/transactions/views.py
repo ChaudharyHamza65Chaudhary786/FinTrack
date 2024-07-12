@@ -61,4 +61,3 @@ def revert_transaction(request, pk):
         transaction_manager.handle_revert_transaction(transaction, request.data)
         response = Response("Reverted Successfully")
     return response
-        print("Got transactions")
