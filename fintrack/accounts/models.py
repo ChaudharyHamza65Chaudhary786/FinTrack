@@ -13,7 +13,7 @@ class Account(models.Model):
     current_balance = models.PositiveBigIntegerField()
 
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
-    holder = models.ForeignKey(User, on_delete=models.CASCADE)
+    holder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bank_accounts")
 
     def __str__(self):
         return f"{self.branch} {self.title } {self.number}"
