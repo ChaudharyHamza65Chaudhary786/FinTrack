@@ -1,6 +1,5 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
-from rest_framework.decorators import permission_classes
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -16,7 +15,7 @@ transaction_manager = TransactionManager()
 class TransactionView(APIView):
 
     permission_classes = [IsAuthenticated]
-    
+
     def get(self, request):
         transactions = Transaction.objects.filter(transaction_from_account__in=request.user.bank_accounts.all())
 
