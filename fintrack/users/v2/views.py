@@ -6,6 +6,8 @@ from users.serializer import UserSerializer
 
 class UserRegistrationView(APIView):
 
+    permission_classes = []
+
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
