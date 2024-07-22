@@ -12,6 +12,8 @@ from transactions.transaction_helper import TransactionManager
 transaction_manager = TransactionManager()
 
 
+
+
 class TransactionView(APIView):
 
     permission_classes = [IsAuthenticated]
@@ -26,11 +28,10 @@ class TransactionView(APIView):
         return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
-        response = None
 
         if request.data["amount"] < 0:
             response = Response(
-                "Transaction Can not be negative", 
+                transaction_manager.get_json_response(" Transaction Can not be negative"), 
                 status=status.HTTP_400_BAD_REQUEST
             )
         else:
@@ -39,6 +40,7 @@ class TransactionView(APIView):
             serializer.is_valid(raise_exception=True)
             transaction_manager.handle_new_transaction(serializer.validated_data)
             response = Response(serializer.data)   
+            
         return response
 
 
@@ -47,7 +49,11 @@ class TransactionDetailView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
-        transaction = get_object_or_404(Transaction, pk=pk, transaction_from_account__holder=request.user)
+        transaction = get_object_or_404(
+            Transaction, 
+            pk=pk, 
+            transaction_from_account__holder=request.user
+        )
         serializer = TransactionSerializer(transaction)
         return Response(serializer.data)
 
@@ -57,16 +63,19 @@ class RevertTransactionView(APIView):
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
-        response = None
-
-        transaction = get_object_or_404(Transaction, pk=pk, transaction_from_account__holder=request.user)
+        transaction = get_object_or_404(
+            Transaction, 
+            pk=pk, 
+            transaction_from_account__holder=request.user
+        )
 
         if transaction.amount < 0:
             response = Response(
-                "Can not revert this transaction", 
-                status=status.HTTP_400_BAD_REQUEST
+                transaction_manager.get_json_response( " Can not revert this transaction"), 
+                status= status.HTTP_400_BAD_REQUEST
             )
         else:
             transaction_manager.handle_revert_transaction(transaction, request.data)
-            response = Response("Reverted Successfully")
+            response = Response(transaction_manager.get_json_response(" Reverted Successfully"))
+
         return response
