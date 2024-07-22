@@ -17,7 +17,8 @@ class TransactionManager:
             "date": transaction_to_revert.date, 
             "amount": transaction_to_revert.amount,
             "transaction_from_account": transaction_to_revert.transaction_from_account,
-            "category": transaction_to_revert.category,  
+            "category": transaction_to_revert.category,
+            "is_reverted": True
         }
         if new_amount:
             transaction_data["amount"] = new_amount

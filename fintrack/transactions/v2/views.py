@@ -52,9 +52,9 @@ class RevertTransactionView(APIView):
             transaction_from_account__holder=request.user
         )
 
-        if transaction.amount < 0:
+        if transaction.is_reverted:
             response = Response(
-                transaction_manager.get_json_response( " Can not revert this transaction"), 
+                transaction_manager.get_json_response( "Can not revert this transaction"), 
                 status= status.HTTP_400_BAD_REQUEST
             )
         else:
