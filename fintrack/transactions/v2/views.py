@@ -24,19 +24,11 @@ class TransactionView(APIView):
 
     def post(self, request):
 
-        if request.data["amount"] < 0:
-            response = Response(
-                transaction_manager.get_json_response(" Transaction Can not be negative"), 
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        else:
-            serializer = TransactionSerializer(data=request.data)
+        serializer = TransactionSerializer(data=request.data)
 
-            serializer.is_valid(raise_exception=True)
-            transaction_manager.handle_new_transaction(serializer.validated_data)
-            response = Response(serializer.data)   
-
-        return response
+        serializer.is_valid(raise_exception=True)
+        transaction_manager.handle_new_transaction(serializer.validated_data)
+        return Response(serializer.data)   
 
 
 class TransactionDetailView(APIView):
