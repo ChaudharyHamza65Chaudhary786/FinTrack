@@ -15,6 +15,7 @@ class Transaction(models.Model):
 
     amount = models.IntegerField()
 
+    is_reverted = models.BooleanField(default=False)
 
     transaction_from_account = models.ForeignKey(
         "accounts.Account", 

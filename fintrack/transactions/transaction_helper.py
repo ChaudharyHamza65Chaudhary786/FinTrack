@@ -17,7 +17,8 @@ class TransactionManager:
             "date": transaction_to_revert.date, 
             "amount": transaction_to_revert.amount,
             "transaction_from_account": transaction_to_revert.transaction_from_account,
-            "category": transaction_to_revert.category,  
+            "category": transaction_to_revert.category,
+            "is_reverted": True
         }
         if new_amount:
             transaction_data["amount"] = new_amount
@@ -25,6 +26,8 @@ class TransactionManager:
             
         transaction_data["amount"] = -(transaction_to_revert.amount)
         self.handle_new_transaction(transaction_data)
+        transaction_to_revert.is_reverted = True
+        transaction_to_revert.save()
         
     @transaction.atomic
     def handle_new_transaction(self, transaction_updated_data):
@@ -40,7 +43,8 @@ class TransactionManager:
             date=transaction_data["date"],
             amount=transaction_data["amount"], 
             transaction_from_account=transaction_data["transaction_from_account"], 
-            category=transaction_data["category"]
+            category=transaction_data["category"],
+            is_reverted=transaction_data["is_reverted"]
         )  
     
     def update_balance_on_transaction_creation(self, account, transaction_updated_data):
