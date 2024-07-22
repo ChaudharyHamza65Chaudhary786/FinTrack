@@ -13,7 +13,6 @@ transaction_manager = TransactionManager()
 
 
 @api_view(['GET', 'POST'])
-@permission_classes([IsAuthenticated])
 def transaction(request):
     response = None 
 
@@ -42,7 +41,6 @@ def transaction(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
 def transaction_detail(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk, transaction_from_account__holder=request.user)
     serializer = TransactionSerializer(transaction)
@@ -50,7 +48,6 @@ def transaction_detail(request, pk):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
 def revert_transaction(request, pk):
     response = None
     transaction = get_object_or_404(Transaction, pk=pk, transaction_from_account__holder=request.user)
