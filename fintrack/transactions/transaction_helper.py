@@ -55,8 +55,3 @@ class TransactionManager:
                 account, 
                 transaction_updated_data["amount"]
             )
-        
-    def get_json_response(self, message):
-        return {
-            "message": message,
-        }

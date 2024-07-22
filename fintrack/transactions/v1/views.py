@@ -46,10 +46,12 @@ def revert_transaction(request, pk):
 
     if transaction.amount < 0:
         response = Response(
-                transaction_manager.get_json_response( " Can not revert this transaction"), 
+                { "message": " Can not revert this transaction"}, 
                 status= status.HTTP_400_BAD_REQUEST
             )
     else:
         transaction_manager.handle_revert_transaction(transaction, request.data)
-        response = Response(transaction_manager.get_json_response(" Reverted Successfully"))
+        response = Response(
+                { "message": "Reverted Successfully"}
+            )
     return response
