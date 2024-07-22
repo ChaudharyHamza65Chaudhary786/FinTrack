@@ -1,7 +1,6 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.pagination import PageNumberPagination
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
@@ -12,11 +11,7 @@ from transactions.transaction_helper import TransactionManager
 transaction_manager = TransactionManager()
 
 
-
-
 class TransactionView(APIView):
-
-    permission_classes = [IsAuthenticated]
 
     def get(self, request):
         transactions = Transaction.objects.filter(transaction_from_account__in=request.user.bank_accounts.all())
@@ -40,13 +35,11 @@ class TransactionView(APIView):
             serializer.is_valid(raise_exception=True)
             transaction_manager.handle_new_transaction(serializer.validated_data)
             response = Response(serializer.data)   
-            
+
         return response
 
 
 class TransactionDetailView(APIView):
-
-    permission_classes = [IsAuthenticated]
 
     def get(self, request, pk):
         transaction = get_object_or_404(
@@ -59,8 +52,6 @@ class TransactionDetailView(APIView):
 
 
 class RevertTransactionView(APIView):
-
-    permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
         transaction = get_object_or_404(
