@@ -43,7 +43,7 @@ def transaction_detail(request, pk):
 def revert_transaction(request, pk):
     transaction = get_object_or_404(Transaction, pk=pk, transaction_from_account__holder=request.user)
 
-    if transaction.amount < 0:
+    if transaction.is_reverted:
         response = Response(
                 { "message": " Can not revert this transaction"}, 
                 status= status.HTTP_400_BAD_REQUEST
