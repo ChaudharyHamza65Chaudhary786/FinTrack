@@ -22,7 +22,7 @@ class Command(BaseCommand):
         }
 
     def handle(self, *args, **kwargs):     
-        user, _ = User.objects.get_or_create(username='hamza65', password='hamza')   
+        user, _ = User.objects.get_or_create(username='ali')   
         bank, _ = Bank.objects.get_or_create(name="HBL")
         branch, _  = Branch.objects.get_or_create(
             bank=bank, 
@@ -36,30 +36,30 @@ class Command(BaseCommand):
             branch=branch,
             current_balance=1200, 
             number="200", 
-            title="hamza", 
+            title="ali", 
             category="CURRENT", 
             holder=user
         )
 
-        trans1 = transaction_manager.handle_new_transaction(
-            self.create_transaction_data(
-                "first transaction", 
-                datetime.date(2023, 10, 5), 
-                500, 
-                account, 
-                "WITHDRAW"
-            )
-        )
+        # trans1 = transaction_manager.handle_new_transaction(
+        #     self.create_transaction_data(
+        #         "first transaction", 
+        #         datetime.date(2023, 10, 5), 
+        #         500, 
+        #         account, 
+        #         "WITHDRAW"
+        #     )
+        # )
         
-        trans2 = transaction_manager.handle_new_transaction(
-            self.create_transaction_data(
-                "secondst transaction", 
-                datetime.date(2023, 10, 5), 
-                5000, 
-                account, 
-                "DEPOSIT"
-            )
-        )
-        acc = Account.objects.get(number="200")
-        acc_1 = Account.objects.get(number="100")
-        print(acc.current_balance, acc_1.current_balance)
+        # trans2 = transaction_manager.handle_new_transaction(
+        #     self.create_transaction_data(
+        #         "secondst transaction", 
+        #         datetime.date(2023, 10, 5), 
+        #         5000, 
+        #         account, 
+        #         "DEPOSIT"
+        #     )
+        # )
+        # acc = Account.objects.get(number="200")
+        # acc_1 = Account.objects.get(number="100")
+        # print(acc.current_balance, acc_1.current_balance)

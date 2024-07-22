@@ -25,7 +25,6 @@ def transaction(request):
         
     else:
         serializer = TransactionSerializer(data=request.data)
-
         serializer.is_valid(raise_exception=True)
         transaction_manager.handle_new_transaction(serializer.validated_data)
         response = Response(serializer.data)    

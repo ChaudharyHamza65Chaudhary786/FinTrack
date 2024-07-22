@@ -11,3 +11,4 @@ class TransactionSerializer(serializers.ModelSerializer):
     def validate_amount(self, amount):
         if amount < 0:
             raise serializers.ValidationError("Transaction Can not be negative")
+        return amount
