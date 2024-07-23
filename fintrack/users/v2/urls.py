@@ -1,9 +1,8 @@
 from django.urls import path
-from rest_framework_simplejwt import views
 
-from . views import UserRegistrationAPIView
+from . views import RegistrationAPIView
 
 
 urlpatterns = [
-    path('register/', UserRegistrationAPIView.as_view(), name='register'),
+    path('register/', RegistrationAPIView.as_view(), name='register'),
 ]

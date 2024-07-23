@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from users.serializer import UserSerializer
 
 
-class UserRegistrationAPIView(APIView):
+class RegistrationAPIView(APIView):
 
     permission_classes = []
 

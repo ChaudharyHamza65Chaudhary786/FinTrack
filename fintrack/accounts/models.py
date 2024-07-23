@@ -9,7 +9,6 @@ class Account(models.Model):
     title = models.CharField(max_length=100)
     number = models.CharField(max_length=20, primary_key=True)
     category = models.CharField(choices=AccountCategoryChoices.choices, max_length=100)
-
     current_balance = models.PositiveBigIntegerField()
 
     branch = models.ForeignKey(Branch, on_delete=models.CASCADE)
