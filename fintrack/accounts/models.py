@@ -15,4 +15,4 @@ class Account(models.Model):
     holder = models.ForeignKey(User, on_delete=models.CASCADE, related_name="bank_accounts")
 
     def __str__(self):
-        return f"{self.branch} {self.title } {self.number}"
+        return f"{self.branch} {self.title} {self.number}"
