@@ -6,7 +6,7 @@ from rest_framework.views import APIView
 
 from transactions.models import Transaction
 from transactions.serializer import TransactionSerializer
-from transactions.transaction_helper import TransactionManager
+from transactions.helper import TransactionManager
 
 transaction_manager = TransactionManager()
 

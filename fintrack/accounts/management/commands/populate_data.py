@@ -4,7 +4,7 @@ from django.core.management.base import BaseCommand
 
 from accounts.models import  Account
 from banks.models import Bank, Branch
-from transactions.transaction_helper import TransactionManager
+from transactions.helper import TransactionManager
 from users.models import User
 
 transaction_manager = TransactionManager()
