@@ -4,7 +4,6 @@ from .choices import TransactionCategoriesChoices
 
 
 class Transaction(models.Model):
-    
     is_reverted = models.BooleanField(default=False, blank=True)
     category = models.CharField(
         max_length=20, 

@@ -15,7 +15,9 @@ transaction_manager = TransactionManager()
 class TransactionViewset(viewsets.ViewSet):
 
     def list(self, request):
-        transactions = Transaction.objects.filter(transaction_from_account__in=request.user.bank_accounts.all())
+        transactions = Transaction.objects.filter(
+            transaction_from_account__in=request.user.bank_accounts.all()
+        )
 
         paginator = PageNumberPagination()
         paginated_transactions = paginator.paginate_queryset(transactions, request)
@@ -48,13 +50,13 @@ class TransactionViewset(viewsets.ViewSet):
 
         if transaction.is_reverted:
             response = Response(
-                { "message": "Can not revert this transaction"}, 
+                {"message": "Can not revert this transaction"}, 
                 status= status.HTTP_400_BAD_REQUEST
             )
         else:
             transaction_manager.handle_revert_transaction(transaction, request.data)
             response = Response(
-                { "message": "Reverted Successfully"}
+                {"message": "Reverted Successfully"}
             )
 
         return response
