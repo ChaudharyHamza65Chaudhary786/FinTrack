@@ -7,11 +7,11 @@ from rest_framework.views import APIView
 from transactions.models import Transaction
 from transactions.serializer import TransactionSerializer
 from transactions.transaction_helper import TransactionManager
-
+from rest_framework.viewsets import ViewSet
 transaction_manager = TransactionManager()
 
 
-class TransactionView(APIView):
+class TransactionAPIView(APIView):
 
     def get(self, request):
         transactions = Transaction.objects.filter(transaction_from_account__in=request.user.bank_accounts.all())
@@ -31,7 +31,7 @@ class TransactionView(APIView):
         return Response(serializer.data)   
 
 
-class TransactionDetailView(APIView):
+class TransactionDetailAPIView(APIView):
 
     def get(self, request, pk):
         transaction = get_object_or_404(
@@ -43,7 +43,7 @@ class TransactionDetailView(APIView):
         return Response(serializer.data)
 
 
-class RevertTransactionView(APIView):
+class RevertTransactionAPIView(APIView):
 
     def post(self, request, pk):
         transaction = get_object_or_404(

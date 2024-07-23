@@ -1,9 +1,9 @@
 from django.urls import path
 
-from .views import TransactionView, TransactionDetailView, RevertTransactionView
+from .views import TransactionAPIView, TransactionDetailAPIView, RevertTransactionAPIView
 
 urlpatterns = [
-    path('', TransactionView.as_view(), name='transaction_list'),
-    path('<int:pk>/', TransactionDetailView.as_view(), name='transaction_detail'),
-    path('revert-transaction/<int:pk>/', RevertTransactionView.as_view(), name='revert_transaction'),
+    path('', TransactionAPIView.as_view(), name='transaction_list'),
+    path('<int:pk>/', TransactionDetailAPIView.as_view(), name='transaction_detail'),
+    path('revert-transaction/<int:pk>/', RevertTransactionAPIView.as_view(), name='revert_transaction'),
 ]
