@@ -14,6 +14,6 @@ class TransactionAdmin(admin.ModelAdmin):
 
     list_filter = (
         'category',
-        "transaction_from_account",
+        'transaction_from_account',
         'is_reverted'
     )
