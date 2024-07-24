@@ -3,6 +3,7 @@ from django.contrib import admin
 from . models import Bank, Branch
 
 
+@admin.register(Branch)
 class BranchAdmin(admin.ModelAdmin):
     list_display = (
         'name',
@@ -14,5 +15,8 @@ class BranchAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(Bank)
-admin.site.register(Branch, BranchAdmin)
+@admin.register(Bank)
+class BankAdmin(admin.ModelAdmin):
+    list_display = (
+        'name',
+    )
