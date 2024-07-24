@@ -1,7 +1,7 @@
 from django.db import transaction
 
-from . models import Transaction
-from accounts.account_helper import AccountHelper
+from .models import Transaction
+from accounts.helper import AccountHelper
 
 WITHDRAW_CATEGORY = "WITHDRAW"
 DEPOSIT_CATEGORY = "DEPOSIT"
@@ -44,7 +44,7 @@ class TransactionManager:
             amount=transaction_data["amount"], 
             transaction_from_account=transaction_data["transaction_from_account"], 
             category=transaction_data["category"],
-            is_reverted=transaction_data["is_reverted"]
+            is_reverted=transaction_data.get("is_reverted", False)
         )  
     
     def update_balance_on_transaction_creation(self, account, transaction_updated_data):

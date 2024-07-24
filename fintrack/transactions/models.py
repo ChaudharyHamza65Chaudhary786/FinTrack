@@ -4,18 +4,14 @@ from .choices import TransactionCategoriesChoices
 
 
 class Transaction(models.Model):
-    description = models.TextField(blank=True)
-    
+    is_reverted = models.BooleanField(default=False, blank=True)
     category = models.CharField(
         max_length=20, 
         choices=TransactionCategoriesChoices.choices
     )
-
     date = models.DateField()
-
     amount = models.IntegerField()
-
-    is_reverted = models.BooleanField(default=False)
+    description = models.TextField(blank=True)
 
     transaction_from_account = models.ForeignKey(
         "accounts.Account", 
