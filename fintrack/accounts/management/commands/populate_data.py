@@ -21,22 +21,22 @@ class Command(BaseCommand):
             "category": category
         }
 
-    def handle(self, *args, **kwargs):     
-        user, _ = User.objects.get_or_create(username='hamza')   
-        bank, _ = Bank.objects.get_or_create(name="HBL")
-        branch, _  = Branch.objects.get_or_create(
-            bank=bank, 
-            name="JT", 
-            code="2000", 
-            address=" Johar town, Lahore", 
-            phone_number="042-35315101"
+        def handle(self, *args, **kwargs):     
+            user, _ = User.objects.get_or_create(username='ali')   
+            bank, _ = Bank.objects.get_or_create(name="HBL")
+            branch, _  = Branch.objects.get_or_create(
+                bank=bank, 
+                name="JT", 
+                code="0169", 
+                address=" Johar town, Lahore", 
+                phone_number="042-35315101"
         )
 
         account, _ = Account.objects.get_or_create(
             branch=branch,
             current_balance=1200, 
-            number="300", 
-            title="HAMZA", 
+            number="200", 
+            title="ali", 
             category="CURRENT", 
             holder=user
         )
