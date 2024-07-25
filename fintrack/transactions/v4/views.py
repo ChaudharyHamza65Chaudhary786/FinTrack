@@ -21,7 +21,6 @@ class TransactionAPIView(ListCreateAPIView):
 
     
 class TransactionDetailAPIView(RetrieveAPIView):
-    
     serializer_class = TransactionSerializer
     queryset = Transaction.objects.all()
 
