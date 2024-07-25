@@ -29,8 +29,6 @@ class RevertTransactionAPIView(CreateAPIView):
     serializer_class = RevertTransactionSerializer
 
     def create(self, request, *args, **kwargs):
-        request.data["transaction"] = kwargs.get('pk')
-
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
