@@ -28,15 +28,8 @@ class TransactionDetailAPIView(RetrieveAPIView):
 class RevertTransactionAPIView(CreateAPIView):
     serializer_class = RevertTransactionSerializer
 
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        
+    def perform_create(self, serializer):
         transaction_manager.handle_revert_transaction(
             serializer.validated_data['transaction'], 
             serializer.validated_data['amount']
-        )
-
-        return Response(
-            {"message": "Reverted Successfully"}
         )
