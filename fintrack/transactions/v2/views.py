@@ -55,5 +55,5 @@ class RevertTransactionAPIView(APIView):
         )
 
         return Response(
-            { "message": "Reverted Successfully"}
+            {"message": "Reverted Successfully"}
         ) 

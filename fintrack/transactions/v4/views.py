@@ -2,8 +2,8 @@ from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveAP
 from rest_framework.response import Response
 
 from transactions.models import Transaction
-from transactions.serializer import TransactionSerializer, RevertTransactionSerializer
 from transactions.helper import TransactionManager
+from transactions.serializer import RevertTransactionSerializer, TransactionSerializer
 
 transaction_manager = TransactionManager()
 
