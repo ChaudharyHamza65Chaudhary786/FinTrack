@@ -1,13 +1,16 @@
 from django.contrib import admin
 
-from . models import Account
+from .models import Account
 
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
     list_display = (
-        'holder', 
+        'title',
+        'number',
+        'category',
+        'current_balance',
         'branch',
-        'title', 
-        'number'
+        'holder',
     )
+    list_filter = ('branch', 'holder')
