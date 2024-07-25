@@ -22,12 +22,12 @@ class Command(BaseCommand):
         }
 
     def handle(self, *args, **kwargs):     
-        user, _ = User.objects.get_or_create(username='ali')   
+        user, _ = User.objects.get_or_create(username='hamza')   
         bank, _ = Bank.objects.get_or_create(name="HBL")
         branch, _  = Branch.objects.get_or_create(
             bank=bank, 
             name="JT", 
-            code="0169", 
+            code="2000", 
             address=" Johar town, Lahore", 
             phone_number="042-35315101"
         )
@@ -35,8 +35,8 @@ class Command(BaseCommand):
         account, _ = Account.objects.get_or_create(
             branch=branch,
             current_balance=1200, 
-            number="200", 
-            title="ali", 
+            number="300", 
+            title="HAMZA", 
             category="CURRENT", 
             holder=user
         )
