@@ -13,4 +13,4 @@ class AccountAdmin(admin.ModelAdmin):
         'branch',
         'holder',
     )
-    list_filter = ('branch', 'holder')
+    list_filter = ('category',)
