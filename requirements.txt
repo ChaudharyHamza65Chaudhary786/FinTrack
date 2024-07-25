@@ -1,5 +1,5 @@
 Django==4.2.13
 djangorestframework==3.15.2
-djangorestframework-simplejwt==5.3.1x
+djangorestframework-simplejwt==5.3.1
 python-decouple==3.8
 django-extensions==3.2.3
