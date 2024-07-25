@@ -1,11 +1,10 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response    
 
 from transactions.models import Transaction
-from transactions.serializer import TransactionSerializer
+from transactions.serializer import TransactionSerializer, RevertTransactionSerializer
 from transactions.helper import TransactionManager
 
 transaction_manager = TransactionManager()
@@ -40,17 +39,15 @@ def transaction_detail(request, pk):
 
 
 @api_view(['POST'])
-def revert_transaction(request, pk):
-    transaction = get_object_or_404(Transaction, pk=pk, transaction_from_account__holder=request.user)
+def revert_transaction(request): 
+    serializer = RevertTransactionSerializer(data=request.data)
+    serializer.is_valid(raise_exception=True)
 
-    if transaction.is_reverted:
-        response = Response(
-                { "message": " Can not revert this transaction"}, 
-                status= status.HTTP_400_BAD_REQUEST
-            )
-    else:
-        transaction_manager.handle_revert_transaction(transaction, request.data)
-        response = Response(
-                { "message": "Reverted Successfully"}
-            )
-    return response
+    transaction_manager.handle_revert_transaction(
+        serializer.validated_data["transaction"],
+        serializer.validated_data["amount"]
+    )
+
+    return Response(
+        {"message": "Reverted Successfully"}
+    )
