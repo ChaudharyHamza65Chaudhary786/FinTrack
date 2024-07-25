@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework import serializers
 from rest_framework.response import Response
 
-from . models import Transaction
+from .models import Transaction
 
 
 class TransactionSerializer(serializers.ModelSerializer):
@@ -16,18 +16,14 @@ class TransactionSerializer(serializers.ModelSerializer):
         return amount
 
 
-class TransactionRevertSerializer(serializers.Serializer):
+class RevertTransactionSerializer(serializers.Serializer):
+    transaction = serializers.PrimaryKeyRelatedField(queryset=Transaction.objects.all())
     amount = serializers.IntegerField()
 
     def validate(self, attrs):
-        transaction_id = self.context.get('view').kwargs['pk']
-        
-        transaction = get_object_or_404(
-            Transaction, 
-            pk=transaction_id, 
-        )
-        if transaction.is_reverted:
+        if attrs['transaction'].is_reverted:
             raise serializers.ValidationError("Transaction is already reverted")
+        if attrs['amount'] <= 0:
+            raise serializers.ValidationError("Transaction amount can not be negative")
         
         return attrs
-
