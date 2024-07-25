@@ -20,5 +20,14 @@ class TransactionRevertSerializer(serializers.Serializer):
     amount = serializers.IntegerField()
 
     def validate(self, attrs):
-        if self.data.is_reverted:
-            raise ValueError("Can not revert this transaction")
+        transaction_id = self.context.get('view').kwargs['pk']
+        
+        transaction = get_object_or_404(
+            Transaction, 
+            pk=transaction_id, 
+        )
+        if transaction.is_reverted:
+            raise serializers.ValidationError("Transaction is already reverted")
+        
+        return attrs
+

@@ -12,7 +12,6 @@ transaction_manager = TransactionManager()
 
 class TransactionView(ListCreateAPIView,RetrieveAPIView):
     serializer_class = TransactionSerializer
-    queryset = Transaction.objects.all()
 
     def get_queryset(self):
         return Transaction.objects.filter(
@@ -33,10 +32,13 @@ class TransactionDetailView(RetrieveAPIView):
 
 class RevertTRansactionView(CreateAPIView):
     serializer_class = TransactionRevertSerializer
+    
+    def get_object(self):
+        pk = pk=self.kwargs['pk']
+        return get_object_or_404(Transaction, pk=pk)
 
-    def get_queryset(self):
-       return get_object_or_404(
-            Transaction, 
-            pk=self.kwargs['pk'], 
-            transaction_from_account__holder=self.request.user
+    def perform_create(self, serializer):
+        transaction_manager.handle_revert_transaction(self.get_object(), self.request.data['amount'])
+        return Response(
+            {"message": "Reverted Successfully"}
         )
