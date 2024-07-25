@@ -4,7 +4,7 @@ from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveAP
 from rest_framework.response import Response
 
 from transactions.models import Transaction
-from transactions.serializer import TransactionSerializer
+from transactions.serializer import TransactionSerializer, TransactionRevertSerializer
 from transactions.helper import TransactionManager
 
 transaction_manager = TransactionManager()
@@ -32,22 +32,11 @@ class TransactionDetailView(RetrieveAPIView):
 
 
 class RevertTRansactionView(CreateAPIView):
-    def post(self, request, *args, **kwargs):
-        transaction = get_object_or_404(
+    serializer_class = TransactionRevertSerializer
+
+    def get_queryset(self):
+       return get_object_or_404(
             Transaction, 
             pk=self.kwargs['pk'], 
-            transaction_from_account__holder=request.user
+            transaction_from_account__holder=self.request.user
         )
-
-        if transaction.is_reverted:
-            response = Response(
-                {"message": "Can not revert this transaction"}, 
-                status= status.HTTP_400_BAD_REQUEST
-            )
-        else:
-            transaction_manager.handle_revert_transaction(transaction, request.data)
-            response = Response(
-                {"message": "Reverted Successfully"}
-            )
-
-        return response

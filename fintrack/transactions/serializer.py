@@ -1,4 +1,6 @@
+from django.shortcuts import get_object_or_404
 from rest_framework import serializers
+from rest_framework.response import Response
 
 from . models import Transaction
 
@@ -12,3 +14,11 @@ class TransactionSerializer(serializers.ModelSerializer):
         if amount < 0:
             raise serializers.ValidationError("Transaction Can not be negative")
         return amount
+
+
+class TransactionRevertSerializer(serializers.Serializer):
+    amount = serializers.IntegerField()
+
+    def validate(self, attrs):
+        if self.data.is_reverted:
+            raise ValueError("Can not revert this transaction")
