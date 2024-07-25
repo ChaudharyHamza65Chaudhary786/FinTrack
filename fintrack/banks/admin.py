@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from . models import Bank, Branch
+from .models import Bank, Branch
 
-admin.site.register(Bank)
-admin.site.register(Branch)
+
+@admin.register(Bank)
+class BankAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name')
+    search_fields = ('name',)
+
+
+@admin.register(Branch)
+class BranchAdmin(admin.ModelAdmin):
+    list_display = ('id', 'name', 'code', 'address', 'phone_number', 'bank')
+    search_fields = ('name', 'code')
