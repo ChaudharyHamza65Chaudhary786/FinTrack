@@ -3,7 +3,6 @@ from rest_framework import serializers
 from .models import Bank, Branch
 
 
-
 class BranchSerializer(serializers.ModelSerializer):
     class Meta:
         model = Branch
