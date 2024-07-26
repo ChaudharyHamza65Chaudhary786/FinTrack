@@ -4,30 +4,20 @@ from django.http import HttpResponseForbidden
 
 from .models import Bank, Branch
 from .serializer import BankSerializer, BranchSerializer
+from .permissions import StaffOnly
 
 
 class BankAPIView(ListCreateAPIView):
     serializer_class = BankSerializer
     queryset = Bank.objects.all()
-
-    def list(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return HttpResponseForbidden("Permssion Denied")
-
-        return super().list(request, *args, **kwargs)
-    
-    def create(self, request, *args, **kwargs):
-        if not request.user.is_staff:
-            return HttpResponseForbidden("Permssion Denied")
-        
-        return super().create(request, *args, **kwargs)
-    
+    permission_classes = [StaffOnly]
 
 class BankDetailAPIView(RetrieveAPIView):
     serializer_class = BankSerializer
-    queryset = Bank.objects.all() 
+    queryset = Bank.objects.all()
+    permission_classes = [StaffOnly]
 
 
 class BranchAPIView(CreateAPIView):
     serializer_class = BranchSerializer
-
+    permission_classes = [StaffOnly]
