@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 
-from .models import Bank
+from .models import Bank    
 from .serializer import BankSerializer, BranchSerializer
 from .permissions import StaffOnly
 
