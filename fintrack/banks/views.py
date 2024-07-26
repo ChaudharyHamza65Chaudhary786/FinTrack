@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from rest_framework.generics import ListCreateAPIView
+from rest_framework.generics import ListCreateAPIView, CreateAPIView, RetrieveAPIView
 from django.http import HttpResponseForbidden
 
 from .models import Bank, Branch
 from .serializer import BankSerializer, BranchSerializer
 
 
-class BankViewApi(ListCreateAPIView):
+class BankAPIView(ListCreateAPIView):
     serializer_class = BankSerializer
     queryset = Bank.objects.all()
 
@@ -23,10 +23,11 @@ class BankViewApi(ListCreateAPIView):
         return super().create(request, *args, **kwargs)
     
 
-class BrachAPIView(ListCreateAPIView):
-    serialzer_class = BranchSerializer
+class BankDetailAPIView(RetrieveAPIView):
+    serializer_class = BankSerializer
+    queryset = Bank.objects.all() 
 
-    def get_queryset(self):
-        return Branch.objects.filter(
-            bank__name=self.kwargs['bank']
-        )
+
+class BranchAPIView(CreateAPIView):
+    serializer_class = BranchSerializer
+
