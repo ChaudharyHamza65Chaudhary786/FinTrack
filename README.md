@@ -28,30 +28,23 @@ Celery needs a message broker to send and receive messages. Install Redis with p
 
 pip install redis
 
-3. Configure Celery in Your Project
-Create a celery.py File
 
-Add a celery.py file to the project directory, i.e. celery_project > __init__.py:
-
-In your Django project directory create a file named celery.py
-
-4. Start Redis Server
+3. Start Redis Server
 Make sure the Redis server is running. 
 
 redis-server
 
-5. Run Server 
-Now you need to launch the Django test server:
+4. Run Server 
+Now you need to launch the Django server:
 
 python manage.py runserver
 
-6. Run Celery Worker
+5. Run Celery Worker
 Start the Celery worker to process tasks. Open a terminal window and run:
 
 celery -A your_project_name worker --loglevel=info
 
-7. Run Celery Beat
+6. Run Celery Beat
 If you have periodic tasks and need Celery Beat to schedule them, run:
 
-celery -A your_project_name beat --loglevel=i
-
+celery -A your_project_name beat --loglevel
