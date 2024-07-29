@@ -4,37 +4,35 @@ from django.core import mail
 from django.utils import timezone
 
 from .models import Transaction
+from users.models import User
 
 @shared_task
 def send_transaction_emails():         
-    transactions = Transaction.objects.filter(
-        date=timezone.now().date()
-    )
-    user_emails = transactions.values_list(
-        'transaction_from_account__holder__email',
-        flat=True
-    ).distinct()
+
+    users = User.objects.all()
 
     messages = []
 
-    for user_email in user_emails:
-        user_transactions = transactions.filter(
-            transaction_from_account__holder__email=user_email
+    for user in users:
+        user_transactions = Transaction.objects.filter(
+            transaction_from_account__holder=user,
+            date=timezone.now().date()
         )
-        transaction_list = "\n".join(
-            [
-                f" Category : {transaction.category},"
-                f" Amount : {transaction.amount}, "
-                f" Description : {transaction.description},"
-                f" Account {transaction.transaction_from_account}" for transaction in user_transactions
-            ]
-        )
-        message = (
-            "Daily Transaction Report",
-            transaction_list,
-            config('EMAIL_HOST_USER'),
-            [user_email]
-        )
-        messages.append(message)
-    
-    mail.send_mass_mail(messages, fail_silently= False)
+        if user_transactions:
+            transaction_list = "\n".join(
+                [
+                    f" Category : {transaction.category},"
+                    f" Amount : {transaction.amount}, "
+                    f" Description : {transaction.description},"
+                    f" Account {transaction.transaction_from_account}" for transaction in user_transactions
+                ]
+            )
+            message = (
+                "Daily Transaction Report",
+                transaction_list,
+                config('EMAIL_HOST_USER'),
+                [user.email]
+            )
+            messages.append(message)
+
+    mail.send_mass_mail(messages, fail_silently=False)

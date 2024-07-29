@@ -119,7 +119,7 @@ AUTH_USER_MODEL = 'users.User'
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Karachi'
 
 USE_I18N = True
 
@@ -158,7 +158,6 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 
 CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
-CELERY_TIMEZONE = 'Asia/Karachi'
 CELERY_BEAT_SCHEDULE = {
     'send_transaction_emails': {
         'task': 'transactions.tasks.send_transaction_emails',
