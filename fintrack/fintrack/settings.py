@@ -163,6 +163,6 @@ CELERY_TIMEZONE = 'Asia/Karachi'
 CELERY_BEAT_SCHEDULE = {
     'send_transaction_emails': {
         'task': 'transactions.tasks.send_transaction_emails',
-        'schedule': crontab(minute=40, hour=16), 
+        'schedule': crontab(minute=00, hour=00), 
     },
 }
