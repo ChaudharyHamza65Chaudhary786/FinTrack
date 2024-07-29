@@ -1,6 +1,26 @@
 ### Prerequisites
+. Email Configuration
+Update your Django settings (settings.py) with email configuration:
+
+
+# settings.py
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
+EMAIL_USE_TLS = config('EMAIL_USE_TLS', default=True, cast=bool)
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
 1. Install Celery
 First, install Celery using pip:
+
+pip install celery 
+
+# Celery configuration
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 
 2. Install a Message Broker
@@ -12,7 +32,6 @@ pip install redis
 Create a celery.py File
 
 Add a celery.py file to the project directory, i.e. celery_project > __init__.py:
-from __future__ import absolute_import, unicode_literals
 
 import os
 
