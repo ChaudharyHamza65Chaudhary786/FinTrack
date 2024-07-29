@@ -1,7 +1,7 @@
 import os
 from celery import Celery
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "fintrack.settings")
-app = Celery("fintrack")
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fintrack.settings')
+app = Celery('fintrack')
 app.config_from_object("django.conf:settings", namespace="CELERY")
 app.autodiscover_tasks()

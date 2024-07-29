@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+from celery.schedules import crontab
 from datetime import timedelta
 from pathlib import Path
 
@@ -45,7 +46,8 @@ INSTALLED_APPS = [
     'users',
     'rest_framework',
     'rest_framework_simplejwt',
-    'django_extensions'
+    'django_extensions',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -126,6 +128,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 STATIC_URL = 'static/'
 
@@ -145,6 +148,21 @@ REST_FRAMEWORK = {
     ],
 }
 
-# Celery settings
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+
+CELERY_BEAT_SCHEDULER = 'django_celery_beat.schedulers:DatabaseScheduler'
+CELERY_TIMEZONE = 'Asia/Karachi'
+CELERY_BEAT_SCHEDULE = {
+    'send_transaction_emails': {
+        'task': 'transactions.tasks.send_transaction_emails',
+        'schedule': crontab(minute=40, hour=16), 
+    },
+}
