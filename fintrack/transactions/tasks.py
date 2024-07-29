@@ -5,7 +5,6 @@ from django.utils import timezone
 
 from .models import Transaction
 
-
 @shared_task
 def send_transaction_emails():         
     transactions = Transaction.objects.filter(
