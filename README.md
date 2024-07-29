@@ -33,19 +33,6 @@ Create a celery.py File
 
 Add a celery.py file to the project directory, i.e. celery_project > __init__.py:
 
-import os
-
-from celery import Celery
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "celery_project.settings")
-
-app = Celery("celery_project")
-
-app.config_from_object("django.conf:settings", namespace="CELERY")
-
-# Load task modules from all registered Django app configs.
-app.autodiscover_tasks()
-
 In your Django project directory create a file named celery.py
 
 4. Start Redis Server
