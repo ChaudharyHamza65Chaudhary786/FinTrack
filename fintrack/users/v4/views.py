@@ -1,7 +1,6 @@
 from decouple import config
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
