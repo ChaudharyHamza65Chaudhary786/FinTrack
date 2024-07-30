@@ -46,6 +46,7 @@ class ResetPasswordConfirm(CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        
         reset_object = PasswordReset.objects.get(token=kwargs['token'])
         if not reset_object or timezone.now() > reset_object.expiry_time:
             return Response(
@@ -54,11 +55,9 @@ class ResetPasswordConfirm(CreateAPIView):
             )
 
         user = User.objects.get(email=reset_object.email)
+        user.set_password(request.data['new_password'])
+        user.save()
         
-        if user:
-            user.set_password(request.data['new_password'])
-            user.save()
-            
-            reset_object.delete()
-            
-            return Response({'success':'Password updated'})
+        reset_object.delete()
+        
+        return Response({'success':'Password updated'})
