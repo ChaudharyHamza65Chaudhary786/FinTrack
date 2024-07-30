@@ -15,5 +15,5 @@ class PasswordReset(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.id: 
-            self.expiry_date = timezone.now() + timedelta(minutes=10)
+            self.expiry_time = timezone.now() + timedelta(minutes=10)
         super().save(*args, **kwargs)
