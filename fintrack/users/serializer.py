@@ -24,7 +24,7 @@ class ResetPasswordRequestSerializer(serializers.Serializer):
 
 
 class ResetPasswordSerializer(serializers.Serializer):
-    new_password = serializers.CharField(required=True, max_length=8)
+    new_password = serializers.CharField(required=True, max_length=128)
     confirm_password = serializers.CharField(write_only=True, required=True)
 
     def validate(self, attrs):

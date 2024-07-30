@@ -3,7 +3,6 @@ from decouple import config
 from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
-
 from users.models import User
 
 @shared_task

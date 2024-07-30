@@ -1,6 +1,8 @@
 from decouple import config
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
@@ -29,9 +31,8 @@ class ResetPasswordRequest(CreateAPIView):
         
         token_generator = PasswordResetTokenGenerator()
         token = token_generator.make_token(user)
-
-        reset_object = PasswordReset(email=request.data['email'], token=token)
-        reset_object.save()
+        
+        PasswordReset.objects.create(email=request.data['email'], token=token)
 
         reset_url = f"{config('PASSWORD_RESET_BASE_URL')}{token}"
 
@@ -46,19 +47,19 @@ class ResetPasswordConfirm(CreateAPIView):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        try:
-            reset_object = PasswordReset.objects.get(token=kwargs['token'])
-        except:
+        reset_object = PasswordReset.objects.get(token=kwargs['token'])
+        if not reset_object or timezone.now() > reset_object.expiry_date:
             return Response(
                 {'error':'Invalid or Expired Link'},
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         user = User.objects.get(email=reset_object.email)
-        user.set_password(request.data['new_password'])
-        user.save()
         
-        reset_object.delete()
-        
-        return Response({'success':'Password updated'})
+        if user:
+            user.set_password(request.data['new_password'])
+            user.save()
+            
+            reset_object.delete()
+            
+            return Response({'success':'Password updated'})
