@@ -47,7 +47,7 @@ class ResetPasswordConfirm(CreateAPIView):
         serializer.is_valid(raise_exception=True)
 
         try:
-            reset_object = PasswordReset.objects.get(email=request.data['email'], token=request.data['token'])
+            reset_object = PasswordReset.objects.get(token=kwargs['token'])
         except:
             return Response({"error": "Invalid or already used Link"}, status=status.HTTP_400_BAD_REQUEST)
         
