@@ -1,4 +1,3 @@
-from decouple import config
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import timezone
@@ -33,7 +32,7 @@ class ResetPasswordRequest(CreateAPIView):
         
         PasswordReset.objects.create(email=request.data['email'], token=token)
 
-        reset_url = f"{config('PASSWORD_RESET_BASE_URL')}{token}"
+        reset_url = f"{'http://127.0.0.1:8000/api/v4/user/password-reset/'}{token}"
 
         send_password_reset_email.delay(self.request.data['email'], reset_url)
         return Response({"success": "Email sent with forget password link"})
