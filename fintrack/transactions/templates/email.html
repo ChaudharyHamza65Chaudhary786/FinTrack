@@ -1,0 +1,15 @@
+
+<body>
+    <h2>Daily Transaction Report</h2>
+    <ul>
+        {% for transaction in transactions %}
+            <li>
+                <strong>Category:</strong> {{ transaction.category }}<br>
+                <strong>Amount:</strong> {{ transaction.amount }}<br>
+                <strong>Description:</strong> {{ transaction.description }}
+                <br>
+                <br>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
