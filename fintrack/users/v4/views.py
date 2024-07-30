@@ -47,8 +47,8 @@ class ResetPasswordConfirm(CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         
-        reset_object = PasswordReset.objects.get(token=kwargs['token'])
-        if not reset_object or timezone.now() > reset_object.expiry_time:
+        reset_object = get_object_or_404(PasswordReset, token=kwargs['token'])
+        if timezone.now() > reset_object.expiry_time:
             return Response(
                 {'error':'Invalid or Expired Link'},
                 status=status.HTTP_400_BAD_REQUEST
