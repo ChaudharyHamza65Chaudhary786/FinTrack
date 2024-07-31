@@ -11,6 +11,10 @@ class User(AbstractUser):
 
 
 class PasswordReset(models.Model):
-    email = models.EmailField()
+    is_used = models.BooleanField(default=False)
     token = models.CharField(max_length=100)
-    expiry_time = models.DateTimeField(default=timezone.now() + timedelta(minutes=10))
+    expiry_time = models.DateTimeField(
+        default=timezone.now() + timedelta(minutes=10)
+    )
+  
+    user = models.ForeignKey("User", on_delete=models.CASCADE)
