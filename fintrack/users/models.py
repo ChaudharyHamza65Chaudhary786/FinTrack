@@ -13,7 +13,7 @@ class User(AbstractUser):
 class PasswordReset(models.Model):
     email = models.EmailField()
     token = models.CharField(max_length=100)
-    expiry_time= models.DateTimeField()
+    expiry_time = models.DateTimeField()
 
     def save(self, *args, **kwargs):
         if not self.id: 
