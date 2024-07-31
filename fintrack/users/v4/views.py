@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils import timezone
 from rest_framework import status
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView, UpdateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 
@@ -37,24 +37,27 @@ class ResetPasswordRequest(CreateAPIView):
         
         send_password_reset_email.delay(user.email, reset_url)
         return Response({"success": "Email sent with forget password link"})
-    
 
-class ResetPasswordConfirm(CreateAPIView):
+
+class ResetPasswordConfirm(UpdateAPIView):
     serializer_class = ResetPasswordSerializer
     permission_classes = [AllowAny]
 
-    def create(self, request, *args, **kwargs):
+    def get_object(self):
+        return PasswordReset.objects.get(token=self.kwargs['token'])
+
+    def update(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        reset_object = PasswordReset.objects.get(token=kwargs['token'])
+        reset_object = self.get_object()
 
         if reset_object.is_used:
             return Response(
                 {"error": "Link already used"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         if timezone.now() > reset_object.expiry_time:
             return Response(
                 {'error':'Link Expired'},
@@ -66,4 +69,5 @@ class ResetPasswordConfirm(CreateAPIView):
 
         reset_object.is_used = True
         reset_object.save()
-        return Response({'success':'Password updated'})
+
+        return Response({'success':'Password updated'})       
