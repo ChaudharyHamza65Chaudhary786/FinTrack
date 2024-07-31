@@ -53,3 +53,6 @@ celery -A your_project_name beat --loglevel
 You can install django-filter using pip:
     pip install django-filter
 Then add in your installed apps and to use the django-filter backend by default, add it to the DEFAULT_FILTER_BACKENDS setting
+
+8. Install ReportLab for creating PDF
+    python -m pip install reportlab
