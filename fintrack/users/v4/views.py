@@ -51,6 +51,7 @@ class ResetPasswordConfirm(CreateAPIView):
             reset_object = PasswordReset.objects.get(token=kwargs['token'])
         except:
             return Response({"error": "Invalid or already used Link"}, status=status.HTTP_400_BAD_REQUEST)
+            
         
         if timezone.now() > reset_object.expiry_time:
             return Response(

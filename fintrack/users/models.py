@@ -13,9 +13,4 @@ class User(AbstractUser):
 class PasswordReset(models.Model):
     email = models.EmailField()
     token = models.CharField(max_length=100)
-    expiry_time = models.DateTimeField()
-
-    def save(self, *args, **kwargs):
-        if not self.id: 
-            self.expiry_time = timezone.now() + timedelta(minutes=10)
-        super().save(*args, **kwargs)
+    expiry_time = models.DateTimeField(default=timezone.now() + timedelta(minutes=10))
