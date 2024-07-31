@@ -57,7 +57,6 @@ class ResetPasswordConfirm(UpdateAPIView):
                 {"error": "Link already used"}, 
                 status=status.HTTP_400_BAD_REQUEST
             )
-
         if timezone.now() > reset_object.expiry_time:
             return Response(
                 {'error':'Link Expired'},
