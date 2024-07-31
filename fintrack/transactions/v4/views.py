@@ -1,15 +1,16 @@
 from rest_framework.generics import CreateAPIView, ListCreateAPIView, RetrieveAPIView
-from rest_framework.response import Response
 
 from transactions.models import Transaction
 from transactions.helper import TransactionManager
 from transactions.serializer import RevertTransactionSerializer, TransactionSerializer
+from transactions.filters import TransactionFilter
 
 transaction_manager = TransactionManager()
 
 
 class TransactionAPIView(ListCreateAPIView):
     serializer_class = TransactionSerializer
+    filterset_class = TransactionFilter
 
     def get_queryset(self):
         return Transaction.objects.filter(
@@ -33,3 +34,4 @@ class RevertTransactionAPIView(CreateAPIView):
             serializer.validated_data['transaction'], 
             serializer.validated_data['amount']
         )
+

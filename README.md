@@ -48,3 +48,8 @@ celery -A your_project_name worker --loglevel=info
 If you have periodic tasks and need Celery Beat to schedule them, run:
 
 celery -A your_project_name beat --loglevel
+
+7. Install django-filter
+You can install django-filter using pip:
+    pip install django-filter
+Then add in your installed apps and to use the django-filter backend by default, add it to the DEFAULT_FILTER_BACKENDS setting
