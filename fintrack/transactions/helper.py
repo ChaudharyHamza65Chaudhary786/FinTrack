@@ -72,7 +72,7 @@ class TransactionManager:
         counter = 0
         for transaction in transactions:
             pdf.drawString(100, y_coordinate, f"Transaction ID: {transaction['id']}")
-            pdf.drawString(300, y_coordinate, f"Date:: {transaction['date']}")
+            pdf.drawString(300, y_coordinate, f"Date: {transaction['date']}")
             pdf.drawString(100, y_coordinate-20, f"Category: {transaction['category']}")
             pdf.drawString(300, y_coordinate-20, f"Amount: {transaction['amount']}")
             pdf.drawString(100, y_coordinate-40, f"Transaction From: {transaction['transaction_from_account']}")
