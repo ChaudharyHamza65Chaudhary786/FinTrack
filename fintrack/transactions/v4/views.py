@@ -15,7 +15,7 @@ class TransactionAPIView(ListCreateAPIView):
 
     def get_queryset(self):
         return Transaction.objects.filter(
-            transaction_from_account__in=self.request.user.bank_accounts.all()
+            transaction_from_account__holder=self.request.user
         )
     
     def perform_create(self, serializer):
@@ -44,7 +44,7 @@ class TransactionReportAPIView(ListAPIView):
 
     def get_queryset(self):
         return Transaction.objects.filter(
-            transaction_from_account__in=self.request.user.bank_accounts.all()
+            transaction_from_account__holder=self.request.user
         )
     
     def get(self, request, *args, **kwargs):

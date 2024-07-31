@@ -14,7 +14,9 @@ transaction_manager = TransactionManager()
 class TransactionAPIView(APIView):
 
     def get(self, request):
-        transactions = Transaction.objects.filter(transaction_from_account__in=request.user.bank_accounts.all())
+        transactions = Transaction.objects.filter(
+            transaction_from_account__holder=self.request.user
+        )
 
         paginator = PageNumberPagination()
         paginated_transactions = paginator.paginate_queryset(transactions, request)

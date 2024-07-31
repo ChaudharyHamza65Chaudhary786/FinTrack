@@ -14,7 +14,9 @@ transaction_manager = TransactionManager()
 def transaction(request):
 
     if request.method == 'GET':
-        transactions = Transaction.objects.filter(transaction_from_account__in=request.user.bank_accounts.all())
+        transactions = Transaction.objects.filter(
+            transaction_from_account__holder=request.user
+        )
 
         paginator = PageNumberPagination()
         paginated_transactions = paginator.paginate_queryset(transactions, request)
