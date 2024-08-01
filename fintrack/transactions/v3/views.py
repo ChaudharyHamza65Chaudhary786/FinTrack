@@ -16,7 +16,7 @@ class TransactionViewset(viewsets.ViewSet):
 
     def list(self, request):
         transactions = Transaction.objects.filter(
-            transaction_from_account__in=request.user.bank_accounts.all()
+            transaction_from_account__holder=self.request.user
         )
 
         paginator = PageNumberPagination()

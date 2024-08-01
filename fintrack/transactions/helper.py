@@ -1,4 +1,7 @@
+import io
+
 from django.db import transaction
+from reportlab.pdfgen import canvas
 
 from .models import Transaction
 from accounts.helper import AccountHelper
@@ -58,3 +61,30 @@ class TransactionManager:
                 account, 
                 transaction_updated_data["amount"]
             )
+
+    def generate_transaction_report(self, transactions):
+        buffer = io.BytesIO()
+
+        pdf = canvas.Canvas(buffer)
+        pdf.drawString(200, 750, "Transaction Report")
+
+        y_coordinate = 700
+        counter = 0
+        for transaction in transactions:
+            pdf.drawString(100, y_coordinate, f"Transaction ID: {transaction['id']}")
+            pdf.drawString(300, y_coordinate, f"Date: {transaction['date']}")
+            pdf.drawString(100, y_coordinate-20, f"Category: {transaction['category']}")
+            pdf.drawString(300, y_coordinate-20, f"Amount: {transaction['amount']}")
+            pdf.drawString(100, y_coordinate-40, f"Transaction From: {transaction['transaction_from_account']}")
+            pdf.drawString(300, y_coordinate-40, f"Description: {transaction['description']}")
+            y_coordinate -= 100
+            counter += 1
+
+            if counter == 5 : 
+                pdf.showPage()
+                y_coordinate = 700
+
+        pdf.save()
+
+        buffer.seek(0)
+        return buffer
